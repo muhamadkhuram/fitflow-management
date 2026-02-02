@@ -6,6 +6,7 @@ import {
   Users, 
   UserPlus, 
   CreditCard, 
+  Dumbbell,
   Settings,
   ChevronLeft,
   ChevronRight
@@ -21,6 +22,7 @@ const navItems = [
   { icon: Users, label: "Members", path: "/dashboard/members" },
   { icon: UserPlus, label: "Requests", path: "/dashboard/requests" },
   { icon: CreditCard, label: "Payments", path: "/dashboard/payments" },
+  { icon: Dumbbell, label: "Equipment", path: "/dashboard/equipment" },
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
 

@@ -14,6 +14,167 @@ export type Database = {
   }
   public: {
     Tables: {
+      equipment: {
+        Row: {
+          brand: string | null
+          category_id: string | null
+          created_at: string
+          description: string | null
+          gym_id: string
+          id: string
+          last_maintenance_date: string | null
+          maintenance_notes: string | null
+          model: string | null
+          name: string
+          next_maintenance_date: string | null
+          purchase_date: string | null
+          quantity: number
+          serial_number: string | null
+          status: Database["public"]["Enums"]["equipment_status"]
+          updated_at: string
+        }
+        Insert: {
+          brand?: string | null
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          gym_id: string
+          id?: string
+          last_maintenance_date?: string | null
+          maintenance_notes?: string | null
+          model?: string | null
+          name: string
+          next_maintenance_date?: string | null
+          purchase_date?: string | null
+          quantity?: number
+          serial_number?: string | null
+          status?: Database["public"]["Enums"]["equipment_status"]
+          updated_at?: string
+        }
+        Update: {
+          brand?: string | null
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          gym_id?: string
+          id?: string
+          last_maintenance_date?: string | null
+          maintenance_notes?: string | null
+          model?: string | null
+          name?: string
+          next_maintenance_date?: string | null
+          purchase_date?: string | null
+          quantity?: number
+          serial_number?: string | null
+          status?: Database["public"]["Enums"]["equipment_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equipment_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          gym_id: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          gym_id: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          gym_id?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_categories_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equipment_wishlist: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          description: string | null
+          estimated_cost: number | null
+          gym_id: string
+          id: string
+          name: string
+          priority: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_cost?: number | null
+          gym_id: string
+          id?: string
+          name: string
+          priority?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_cost?: number | null
+          gym_id?: string
+          id?: string
+          name?: string
+          priority?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_wishlist_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_wishlist_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gym_members: {
         Row: {
           avatar_url: string | null
@@ -251,6 +412,11 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      equipment_status:
+        | "working"
+        | "maintenance"
+        | "needs_maintenance"
+        | "out_of_order"
       fee_type: "weekly" | "monthly"
       request_status: "pending" | "approved" | "rejected"
     }
@@ -380,6 +546,12 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      equipment_status: [
+        "working",
+        "maintenance",
+        "needs_maintenance",
+        "out_of_order",
+      ],
       fee_type: ["weekly", "monthly"],
       request_status: ["pending", "approved", "rejected"],
     },
