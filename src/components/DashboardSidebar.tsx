@@ -7,6 +7,7 @@ import {
   UserPlus, 
   CreditCard, 
   Dumbbell,
+  ClipboardCheck,
   Settings,
   ChevronLeft,
   ChevronRight
@@ -23,6 +24,7 @@ const navItems = [
   { icon: UserPlus, label: "Requests", path: "/dashboard/requests" },
   { icon: CreditCard, label: "Payments", path: "/dashboard/payments" },
   { icon: Dumbbell, label: "Equipment", path: "/dashboard/equipment" },
+  { icon: ClipboardCheck, label: "Attendance", path: "/dashboard/attendance" },
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
 
