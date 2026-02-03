@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance: {
+        Row: {
+          check_in_time: string
+          check_out_time: string | null
+          created_at: string
+          gym_id: string
+          id: string
+          member_id: string
+          notes: string | null
+        }
+        Insert: {
+          check_in_time?: string
+          check_out_time?: string | null
+          created_at?: string
+          gym_id: string
+          id?: string
+          member_id: string
+          notes?: string | null
+        }
+        Update: {
+          check_in_time?: string
+          check_out_time?: string | null
+          created_at?: string
+          gym_id?: string
+          id?: string
+          member_id?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "gym_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       equipment: {
         Row: {
           brand: string | null

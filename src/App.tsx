@@ -13,6 +13,7 @@ import MemberDetail from "./pages/MemberDetail";
 import Requests from "./pages/Requests";
 import Payments from "./pages/Payments";
 import Equipment from "./pages/Equipment";
+import Attendance from "./pages/Attendance";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -95,6 +96,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Equipment />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/attendance"
+              element={
+                <ProtectedRoute>
+                  <Attendance />
                 </ProtectedRoute>
               }
             />
