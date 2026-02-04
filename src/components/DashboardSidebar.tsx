@@ -10,7 +10,8 @@ import {
   ClipboardCheck,
   Settings,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  UserCheck
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useState } from "react";
@@ -25,6 +26,7 @@ const navItems = [
   { icon: CreditCard, label: "Payments", path: "/dashboard/payments" },
   { icon: Dumbbell, label: "Equipment", path: "/dashboard/equipment" },
   { icon: ClipboardCheck, label: "Attendance", path: "/dashboard/attendance" },
+  { icon: UserCheck, label: "Trainers", path: "/dashboard/trainers" },
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
 

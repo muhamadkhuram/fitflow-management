@@ -14,6 +14,7 @@ import Requests from "./pages/Requests";
 import Payments from "./pages/Payments";
 import Equipment from "./pages/Equipment";
 import Attendance from "./pages/Attendance";
+import Trainers from "./pages/Trainers";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -104,6 +105,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Attendance />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/trainers"
+              element={
+                <ProtectedRoute>
+                  <Trainers />
                 </ProtectedRoute>
               }
             />
