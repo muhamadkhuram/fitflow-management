@@ -449,6 +449,68 @@ export type Database = {
         }
         Relationships: []
       }
+      trainers: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          email: string | null
+          emergency_contact: string | null
+          full_name: string
+          gym_id: string
+          hire_date: string | null
+          id: string
+          is_active: boolean
+          phone: string | null
+          specializations: string[] | null
+          updated_at: string
+          wage_amount: number
+          wage_type: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          emergency_contact?: string | null
+          full_name: string
+          gym_id: string
+          hire_date?: string | null
+          id?: string
+          is_active?: boolean
+          phone?: string | null
+          specializations?: string[] | null
+          updated_at?: string
+          wage_amount?: number
+          wage_type?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          email?: string | null
+          emergency_contact?: string | null
+          full_name?: string
+          gym_id?: string
+          hire_date?: string | null
+          id?: string
+          is_active?: boolean
+          phone?: string | null
+          specializations?: string[] | null
+          updated_at?: string
+          wage_amount?: number
+          wage_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trainers_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
