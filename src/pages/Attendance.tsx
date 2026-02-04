@@ -12,6 +12,8 @@ import { CalendarIcon, LogOut, Clock, Users, Trash2 } from "lucide-react";
 import { useGyms, useGymMembers } from "@/hooks/useGym";
 import { useAttendance, useActiveCheckIns, useCheckOut, useDeleteAttendance } from "@/hooks/useAttendance";
 import { CheckInDialog } from "@/components/CheckInDialog";
+import { BulkCheckInDialog } from "@/components/BulkCheckInDialog";
+import { BulkCheckOutDialog } from "@/components/BulkCheckOutDialog";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -84,8 +86,14 @@ export default function Attendance() {
   return (
     <DashboardLayout title="Attendance" description="Track member check-ins and check-outs">
       <div className="space-y-6">
-        {/* Header with Check In Button */}
-        <div className="flex justify-end">
+        {/* Header with Check In Buttons */}
+        <div className="flex flex-wrap justify-end gap-2">
+          <BulkCheckOutDialog gymId={gym.id} activeCheckIns={activeCheckIns} />
+          <BulkCheckInDialog 
+            gymId={gym.id} 
+            members={members} 
+            activeCheckIns={activeCheckInMemberIds} 
+          />
           <CheckInDialog 
             gymId={gym.id} 
             members={members} 

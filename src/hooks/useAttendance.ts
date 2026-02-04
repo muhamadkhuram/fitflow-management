@@ -150,6 +150,79 @@ export function useCheckOut() {
   });
 }
 
+export function useBulkCheckIn() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ gymId, memberIds }: { gymId: string; memberIds: string[] }) => {
+      // Get already checked-in members
+      const { data: existing } = await supabase
+        .from("attendance")
+        .select("member_id")
+        .eq("gym_id", gymId)
+        .is("check_out_time", null)
+        .in("member_id", memberIds);
+
+      const alreadyCheckedIn = existing?.map((e) => e.member_id) || [];
+      const toCheckIn = memberIds.filter((id) => !alreadyCheckedIn.includes(id));
+
+      if (toCheckIn.length === 0) {
+        throw new Error("All selected members are already checked in");
+      }
+
+      const records = toCheckIn.map((memberId) => ({
+        gym_id: gymId,
+        member_id: memberId,
+      }));
+
+      const { data, error } = await supabase
+        .from("attendance")
+        .insert(records)
+        .select();
+
+      if (error) throw error;
+      return { count: toCheckIn.length, skipped: alreadyCheckedIn.length };
+    },
+    onSuccess: (result, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["attendance", variables.gymId] });
+      queryClient.invalidateQueries({ queryKey: ["active-check-ins", variables.gymId] });
+      let message = `${result.count} member(s) checked in`;
+      if (result.skipped > 0) {
+        message += ` (${result.skipped} already checked in)`;
+      }
+      toast.success(message);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+}
+
+export function useBulkCheckOut() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ gymId, attendanceIds }: { gymId: string; attendanceIds: string[] }) => {
+      const { data, error } = await supabase
+        .from("attendance")
+        .update({ check_out_time: new Date().toISOString() })
+        .in("id", attendanceIds)
+        .select();
+
+      if (error) throw error;
+      return data.length;
+    },
+    onSuccess: (count, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["attendance", variables.gymId] });
+      queryClient.invalidateQueries({ queryKey: ["active-check-ins", variables.gymId] });
+      toast.success(`${count} member(s) checked out`);
+    },
+    onError: (error) => {
+      toast.error("Failed to check out: " + error.message);
+    },
+  });
+}
+
 export function useDeleteAttendance() {
   const queryClient = useQueryClient();
 
