@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from "./useAuth";
 
 export interface Attendance {
   id: string;
@@ -78,6 +79,7 @@ export function useActiveCheckIns(gymId: string | undefined) {
 
 export function useCheckIn() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async ({ gymId, memberId, notes }: { gymId: string; memberId: string; notes?: string }) => {
@@ -108,6 +110,19 @@ export function useCheckIn() {
         .single();
 
       if (error) throw error;
+
+      // Log activity
+      if (user) {
+        await supabase.from("activity_logs").insert([{
+          gym_id: gymId,
+          user_id: user.id,
+          action: "check_in",
+          entity_type: "member",
+          entity_id: memberId,
+          entity_name: data.member?.full_name,
+        }]);
+      }
+
       return data as Attendance;
     },
     onSuccess: (_, variables) => {
@@ -123,6 +138,7 @@ export function useCheckIn() {
 
 export function useCheckOut() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async ({ attendanceId, gymId }: { attendanceId: string; gymId: string }) => {
@@ -137,6 +153,19 @@ export function useCheckOut() {
         .single();
 
       if (error) throw error;
+
+      // Log activity
+      if (user) {
+        await supabase.from("activity_logs").insert([{
+          gym_id: gymId,
+          user_id: user.id,
+          action: "check_out",
+          entity_type: "member",
+          entity_id: data.member_id,
+          entity_name: data.member?.full_name,
+        }]);
+      }
+
       return data as Attendance;
     },
     onSuccess: (_, variables) => {
@@ -152,6 +181,7 @@ export function useCheckOut() {
 
 export function useBulkCheckIn() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async ({ gymId, memberIds }: { gymId: string; memberIds: string[] }) => {
@@ -181,6 +211,19 @@ export function useBulkCheckIn() {
         .select();
 
       if (error) throw error;
+
+      // Log activity
+      if (user) {
+        await supabase.from("activity_logs").insert([{
+          gym_id: gymId,
+          user_id: user.id,
+          action: "bulk_check_in",
+          entity_type: "attendance",
+          entity_name: `${toCheckIn.length} members`,
+          details: { count: toCheckIn.length },
+        }]);
+      }
+
       return { count: toCheckIn.length, skipped: alreadyCheckedIn.length };
     },
     onSuccess: (result, variables) => {
@@ -200,6 +243,7 @@ export function useBulkCheckIn() {
 
 export function useBulkCheckOut() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async ({ gymId, attendanceIds }: { gymId: string; attendanceIds: string[] }) => {
@@ -210,6 +254,19 @@ export function useBulkCheckOut() {
         .select();
 
       if (error) throw error;
+
+      // Log activity
+      if (user) {
+        await supabase.from("activity_logs").insert([{
+          gym_id: gymId,
+          user_id: user.id,
+          action: "bulk_check_out",
+          entity_type: "attendance",
+          entity_name: `${data.length} members`,
+          details: { count: data.length },
+        }]);
+      }
+
       return data.length;
     },
     onSuccess: (count, variables) => {

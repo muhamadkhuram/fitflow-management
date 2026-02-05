@@ -16,6 +16,7 @@ import { BulkCheckInDialog } from "@/components/BulkCheckInDialog";
 import { BulkCheckOutDialog } from "@/components/BulkCheckOutDialog";
  import { AttendanceChart } from "@/components/AttendanceChart";
  import { CheckOutAllButton } from "@/components/CheckOutAllButton";
+import { CapacityAlert } from "@/components/CapacityAlert";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -103,6 +104,9 @@ export default function Attendance() {
             activeCheckIns={activeCheckInMemberIds} 
           />
         </div>
+
+        {/* Capacity Alert */}
+        <CapacityAlert currentCount={activeCheckIns.length} capacity={gym.capacity} />
 
         {/* Attendance Chart */}
         <AttendanceChart gymId={gym.id} />

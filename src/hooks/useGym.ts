@@ -19,6 +19,7 @@ export interface Gym {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  capacity: number | null;
 }
 
 export interface GymMember {
@@ -33,6 +34,7 @@ export interface GymMember {
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
   avatar_url: string | null;
+  tag: "beginner" | "regular" | "vip" | null;
 }
 
 export interface JoinRequest {
@@ -290,6 +292,35 @@ export function useDeleteMember() {
     },
     onError: (error) => {
       toast.error("Failed to remove member: " + error.message);
+    },
+  });
+}
+
+export function useUpdateMemberTag() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ memberId, gymId, tag }: { 
+      memberId: string; 
+      gymId: string; 
+      tag: "beginner" | "regular" | "vip" 
+    }) => {
+      const { data, error } = await supabase
+        .from("gym_members")
+        .update({ tag })
+        .eq("id", memberId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["gym-members", variables.gymId] });
+      toast.success("Member tag updated!");
+    },
+    onError: (error) => {
+      toast.error("Failed to update tag: " + error.message);
     },
   });
 }

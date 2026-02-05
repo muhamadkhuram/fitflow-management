@@ -16,6 +16,7 @@ import Equipment from "./pages/Equipment";
 import Attendance from "./pages/Attendance";
 import Trainers from "./pages/Trainers";
 import Settings from "./pages/Settings";
+import ActivityLog from "./pages/ActivityLog";
 import NotFound from "./pages/NotFound";
 
 function RootRedirect() {
@@ -113,6 +114,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Trainers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard/activity"
+              element={
+                <ProtectedRoute>
+                  <ActivityLog />
                 </ProtectedRoute>
               }
             />
