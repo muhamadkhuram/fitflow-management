@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useGyms, useGymMembers, useDeleteMember } from "@/hooks/useGym";
 import { AddMemberDialog } from "@/components/AddMemberDialog";
+ import { MemberTagBadge } from "@/components/MemberTagBadge";
 import { 
   Users, 
   Search, 
@@ -99,8 +100,9 @@ export default function Members() {
           ) : (
             <div className="space-y-4">
               {/* Table Header - Desktop */}
-              <div className="hidden md:grid md:grid-cols-5 gap-4 px-4 py-2 text-sm font-medium text-muted-foreground">
+              <div className="hidden md:grid md:grid-cols-6 gap-4 px-4 py-2 text-sm font-medium text-muted-foreground">
                 <div>Name</div>
+                <div>Tag</div>
                 <div>Email</div>
                 <div>Phone</div>
                 <div>Joined</div>
@@ -111,7 +113,7 @@ export default function Members() {
               {filteredMembers.map((member) => (
                 <div 
                   key={member.id}
-                  className="flex flex-col md:grid md:grid-cols-5 gap-2 md:gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
+                  className="flex flex-col md:grid md:grid-cols-6 gap-2 md:gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
                   onClick={() => navigate(`/dashboard/members/${member.id}`)}
                 >
                   {/* Name */}
@@ -129,6 +131,11 @@ export default function Members() {
                       <p className="font-medium truncate">{member.full_name}</p>
                       <p className="text-sm text-muted-foreground md:hidden truncate">{member.email}</p>
                     </div>
+                  </div>
+                  
+                  {/* Tag - Desktop */}
+                  <div className="hidden md:flex items-center">
+                    <MemberTagBadge tag={member.tag} />
                   </div>
                   
                   {/* Email - Desktop */}

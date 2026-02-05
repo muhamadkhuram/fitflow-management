@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          entity_id: string | null
+          entity_name: string | null
+          entity_type: string
+          gym_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_name?: string | null
+          entity_type: string
+          gym_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_name?: string | null
+          entity_type?: string
+          gym_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_logs_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attendance: {
         Row: {
           check_in_time: string
@@ -232,6 +276,7 @@ export type Database = {
           phone: string | null
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
+          tag: Database["public"]["Enums"]["member_tag"] | null
           user_id: string | null
         }
         Insert: {
@@ -245,6 +290,7 @@ export type Database = {
           phone?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
+          tag?: Database["public"]["Enums"]["member_tag"] | null
           user_id?: string | null
         }
         Update: {
@@ -258,6 +304,7 @@ export type Database = {
           phone?: string | null
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
+          tag?: Database["public"]["Enums"]["member_tag"] | null
           user_id?: string | null
         }
         Relationships: [
@@ -273,6 +320,7 @@ export type Database = {
       gyms: {
         Row: {
           address: string | null
+          capacity: number | null
           city: string | null
           cover_image_url: string | null
           created_at: string
@@ -290,6 +338,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          capacity?: number | null
           city?: string | null
           cover_image_url?: string | null
           created_at?: string
@@ -307,6 +356,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          capacity?: number | null
           city?: string | null
           cover_image_url?: string | null
           created_at?: string
@@ -525,6 +575,7 @@ export type Database = {
         | "needs_maintenance"
         | "out_of_order"
       fee_type: "weekly" | "monthly"
+      member_tag: "beginner" | "regular" | "vip"
       request_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
@@ -660,6 +711,7 @@ export const Constants = {
         "out_of_order",
       ],
       fee_type: ["weekly", "monthly"],
+      member_tag: ["beginner", "regular", "vip"],
       request_status: ["pending", "approved", "rejected"],
     },
   },

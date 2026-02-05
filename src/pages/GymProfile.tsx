@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGyms, useCreateGym, useUpdateGym } from "@/hooks/useGym";
-import { Loader2, Save, Building2 } from "lucide-react";
+import { Loader2, Save, Building2, Users } from "lucide-react";
 
 export default function GymProfile() {
   const { data: gyms, isLoading } = useGyms();
@@ -24,6 +24,7 @@ export default function GymProfile() {
     email: "",
     fee_type: "monthly",
     fee_amount: "",
+    capacity: "",
   });
 
   // Update form when gym data loads
@@ -38,6 +39,7 @@ export default function GymProfile() {
         email: activeGym.email || "",
         fee_type: activeGym.fee_type || "monthly",
         fee_amount: activeGym.fee_amount?.toString() || "",
+        capacity: activeGym.capacity?.toString() || "",
       });
     }
   }, [activeGym]);
@@ -49,6 +51,7 @@ export default function GymProfile() {
       ...formData,
       fee_amount: parseFloat(formData.fee_amount) || 0,
       fee_type: formData.fee_type as "weekly" | "monthly",
+      capacity: formData.capacity ? parseInt(formData.capacity) : null,
     };
 
     if (activeGym) {
@@ -204,6 +207,34 @@ export default function GymProfile() {
                 </div>
                 <p className="text-sm text-muted-foreground">
                   Members will be charged ${formData.fee_amount || "0"} {formData.fee_type}.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Capacity
+                </CardTitle>
+                <CardDescription>Set your gym's maximum capacity</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="capacity">Maximum Members Present</Label>
+                  <Input
+                    id="capacity"
+                    type="number"
+                    min="0"
+                    placeholder="50"
+                    value={formData.capacity}
+                    onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {formData.capacity 
+                    ? `You'll receive alerts when approaching ${formData.capacity} members.`
+                    : "Leave empty to disable capacity alerts."}
                 </p>
               </CardContent>
             </Card>

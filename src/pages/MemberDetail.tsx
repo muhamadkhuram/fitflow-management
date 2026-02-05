@@ -5,12 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useGyms, useGymMembers } from "@/hooks/useGym";
+import { useGyms, useGymMembers, useUpdateMemberTag } from "@/hooks/useGym";
 import { useMemberPayments, useAddPayment } from "@/hooks/usePayments";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { MemberTagBadge } from "@/components/MemberTagBadge";
 import {
   ArrowLeft,
   Camera,
@@ -23,6 +24,9 @@ import {
   Building,
   Loader2,
   Plus,
+  Crown,
+  Star,
+  User,
 } from "lucide-react";
 import {
   Dialog,
@@ -39,6 +43,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function MemberDetail() {
   const { memberId } = useParams();
@@ -52,6 +62,7 @@ export default function MemberDetail() {
   const member = members?.find(m => m.id === memberId);
   const { data: payments, isLoading: paymentsLoading } = useMemberPayments(memberId);
   const addPayment = useAddPayment();
+  const updateTag = useUpdateMemberTag();
 
   const [uploading, setUploading] = useState(false);
   const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
@@ -59,6 +70,11 @@ export default function MemberDetail() {
   const [paymentType, setPaymentType] = useState<"cash" | "transfer">("cash");
   const [paymentDescription, setPaymentDescription] = useState("");
   const [paymentDate, setPaymentDate] = useState(format(new Date(), "yyyy-MM-dd"));
+
+  const handleTagChange = (tag: "beginner" | "regular" | "vip") => {
+    if (!activeGym || !memberId) return;
+    updateTag.mutate({ memberId, gymId: activeGym.id, tag });
+  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -190,9 +206,32 @@ export default function MemberDetail() {
               <div className="flex-1 space-y-4">
                 <div>
                   <h2 className="text-2xl font-bold">{member.full_name}</h2>
-                  <span className={`text-sm px-2 py-1 rounded-full ${member.is_active ? 'badge-approved' : 'badge-rejected'}`}>
-                    {member.is_active ? "Active" : "Inactive"}
-                  </span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className={`text-sm px-2 py-1 rounded-full ${member.is_active ? 'badge-approved' : 'badge-rejected'}`}>
+                      {member.is_active ? "Active" : "Inactive"}
+                    </span>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm" className="h-auto p-0">
+                          <MemberTagBadge tag={(member as any).tag} className="cursor-pointer hover:opacity-80" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => handleTagChange("beginner")}>
+                          <User className="h-4 w-4 mr-2" />
+                          Beginner
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleTagChange("regular")}>
+                          <Star className="h-4 w-4 mr-2" />
+                          Regular
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleTagChange("vip")}>
+                          <Crown className="h-4 w-4 mr-2" />
+                          VIP
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

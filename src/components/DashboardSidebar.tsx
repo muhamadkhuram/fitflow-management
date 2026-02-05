@@ -11,7 +11,8 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  UserCheck
+  UserCheck,
+  Activity
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useState } from "react";
@@ -27,6 +28,7 @@ const navItems = [
   { icon: Dumbbell, label: "Equipment", path: "/dashboard/equipment" },
   { icon: ClipboardCheck, label: "Attendance", path: "/dashboard/attendance" },
   { icon: UserCheck, label: "Trainers", path: "/dashboard/trainers" },
+  { icon: Activity, label: "Activity Log", path: "/dashboard/activity" },
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
 
