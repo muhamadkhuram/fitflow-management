@@ -14,6 +14,8 @@ import { useAttendance, useActiveCheckIns, useCheckOut, useDeleteAttendance } fr
 import { CheckInDialog } from "@/components/CheckInDialog";
 import { BulkCheckInDialog } from "@/components/BulkCheckInDialog";
 import { BulkCheckOutDialog } from "@/components/BulkCheckOutDialog";
+ import { AttendanceChart } from "@/components/AttendanceChart";
+ import { CheckOutAllButton } from "@/components/CheckOutAllButton";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -88,6 +90,7 @@ export default function Attendance() {
       <div className="space-y-6">
         {/* Header with Check In Buttons */}
         <div className="flex flex-wrap justify-end gap-2">
+          <CheckOutAllButton gymId={gym.id} activeCheckIns={activeCheckIns} />
           <BulkCheckOutDialog gymId={gym.id} activeCheckIns={activeCheckIns} />
           <BulkCheckInDialog 
             gymId={gym.id} 
@@ -101,6 +104,9 @@ export default function Attendance() {
           />
         </div>
 
+        {/* Attendance Chart */}
+        <AttendanceChart gymId={gym.id} />
+ 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
