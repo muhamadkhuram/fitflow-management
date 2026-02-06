@@ -98,9 +98,9 @@ export default function Members() {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* Table Header - Desktop */}
-              <div className="hidden md:grid md:grid-cols-6 gap-4 px-4 py-2 text-sm font-medium text-muted-foreground">
+              <div className="hidden lg:grid lg:grid-cols-6 gap-4 px-4 py-2 text-sm font-medium text-muted-foreground">
                 <div>Name</div>
                 <div>Tag</div>
                 <div>Email</div>
@@ -113,7 +113,7 @@ export default function Members() {
               {filteredMembers.map((member) => (
                 <div 
                   key={member.id}
-                  className="flex flex-col md:grid md:grid-cols-6 gap-2 md:gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
+                  className="flex flex-col lg:grid lg:grid-cols-6 gap-2 lg:gap-4 p-3 sm:p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
                   onClick={() => navigate(`/dashboard/members/${member.id}`)}
                 >
                   {/* Name */}
@@ -127,39 +127,37 @@ export default function Members() {
                         </span>
                       )}
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p className="font-medium truncate">{member.full_name}</p>
-                      <p className="text-sm text-muted-foreground md:hidden truncate">{member.email}</p>
+                      <div className="flex items-center gap-2 lg:hidden">
+                        <MemberTagBadge tag={member.tag} />
+                        <span className="text-xs text-muted-foreground truncate">{member.email}</span>
+                      </div>
                     </div>
                   </div>
                   
                   {/* Tag - Desktop */}
-                  <div className="hidden md:flex items-center">
+                  <div className="hidden lg:flex items-center">
                     <MemberTagBadge tag={member.tag} />
                   </div>
                   
                   {/* Email - Desktop */}
-                  <div className="hidden md:flex items-center">
+                  <div className="hidden lg:flex items-center">
                     <span className="truncate">{member.email}</span>
                   </div>
                   
                   {/* Phone */}
-                  <div className="hidden md:flex items-center text-muted-foreground">
+                  <div className="hidden lg:flex items-center text-muted-foreground">
                     {member.phone || "-"}
                   </div>
                   
                   {/* Joined */}
-                  <div className="hidden md:flex items-center text-muted-foreground">
+                  <div className="hidden lg:flex items-center text-muted-foreground">
                     {format(new Date(member.joined_at), "MMM d, yyyy")}
                   </div>
                   
                   {/* Actions */}
-                  <div className="flex items-center justify-between md:justify-end gap-2 mt-2 md:mt-0" onClick={(e) => e.stopPropagation()}>
-                    <div className="flex gap-2 md:hidden">
-                      <span className={`text-xs px-2 py-1 rounded-full ${member.is_active ? 'badge-approved' : 'badge-rejected'}`}>
-                        {member.is_active ? "Active" : "Inactive"}
-                      </span>
-                    </div>
+                  <div className="flex items-center justify-end gap-2 lg:justify-end" onClick={(e) => e.stopPropagation()}>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">

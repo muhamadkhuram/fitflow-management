@@ -90,7 +90,7 @@ export default function Attendance() {
     <DashboardLayout title="Attendance" description="Track member check-ins and check-outs">
       <div className="space-y-6">
         {/* Header with Check In Buttons */}
-        <div className="flex flex-wrap justify-end gap-2">
+        <div className="flex flex-wrap justify-end gap-1.5 sm:gap-2">
           <CheckOutAllButton gymId={gym.id} activeCheckIns={activeCheckIns} />
           <BulkCheckOutDialog gymId={gym.id} activeCheckIns={activeCheckIns} />
           <BulkCheckInDialog 
@@ -190,24 +190,24 @@ export default function Attendance() {
                     {activeCheckIns.map((record) => (
                       <div
                         key={record.id}
-                        className="flex items-center justify-between p-4 rounded-lg border"
+                       className="flex items-center justify-between gap-2 p-3 sm:p-4 rounded-lg border"
                       >
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-10 w-10">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <Avatar className="h-10 w-10 flex-shrink-0">
                             <AvatarImage src={record.member?.avatar_url || undefined} />
                             <AvatarFallback>
                               {record.member?.full_name?.charAt(0).toUpperCase() || "?"}
                             </AvatarFallback>
                           </Avatar>
-                          <div>
-                            <p className="font-medium">{record.member?.full_name}</p>
+                          <div className="min-w-0">
+                            <p className="font-medium truncate">{record.member?.full_name}</p>
                             <p className="text-sm text-muted-foreground">
                               Checked in at {formatTime(record.check_in_time)}
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <Badge variant="outline" className="bg-success/10 text-success border-success/20 hidden sm:inline-flex">
                             {formatDuration(record.check_in_time, null)}
                           </Badge>
                           <Button
@@ -216,8 +216,8 @@ export default function Attendance() {
                             onClick={() => checkOut.mutate({ attendanceId: record.id, gymId: gym.id })}
                             disabled={checkOut.isPending}
                           >
-                            <LogOut className="h-4 w-4 mr-1" />
-                            Check Out
+                            <LogOut className="h-4 w-4 sm:mr-1" />
+                            <span className="hidden sm:inline">Check Out</span>
                           </Button>
                         </div>
                       </div>
@@ -270,32 +270,33 @@ export default function Attendance() {
                     {attendance.map((record) => (
                       <div
                         key={record.id}
-                        className="flex items-center justify-between p-4 rounded-lg border"
+                       className="flex items-center justify-between gap-2 p-3 sm:p-4 rounded-lg border"
                       >
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-10 w-10">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <Avatar className="h-10 w-10 flex-shrink-0">
                             <AvatarImage src={record.member?.avatar_url || undefined} />
                             <AvatarFallback>
                               {record.member?.full_name?.charAt(0).toUpperCase() || "?"}
                             </AvatarFallback>
                           </Avatar>
-                          <div>
-                            <p className="font-medium">{record.member?.full_name}</p>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <div className="min-w-0">
+                            <p className="font-medium truncate">{record.member?.full_name}</p>
+                            <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
                               <span>{formatTime(record.check_in_time)}</span>
                               <span>→</span>
                               <span>
                                 {record.check_out_time
                                   ? formatTime(record.check_out_time)
-                                  : "Still present"}
+                                  : "Still here"}
                               </span>
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                           <Badge
                             variant="outline"
                             className={cn(
+                              "hidden sm:inline-flex",
                               record.check_out_time
                                 ? "bg-muted"
                                 : "bg-success/10 text-success border-success/20"
@@ -310,8 +311,8 @@ export default function Attendance() {
                               onClick={() => checkOut.mutate({ attendanceId: record.id, gymId: gym.id })}
                               disabled={checkOut.isPending}
                             >
-                              <LogOut className="h-4 w-4 mr-1" />
-                              Check Out
+                              <LogOut className="h-4 w-4 sm:mr-1" />
+                              <span className="hidden sm:inline">Check Out</span>
                             </Button>
                           )}
                           <AlertDialog>

@@ -34,7 +34,7 @@ export function DashboardLayout({ children, title, description }: DashboardLayou
         "fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 md:hidden",
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <DashboardSidebar />
+        <DashboardSidebar onNavigate={() => setSidebarOpen(false)} />
       </div>
 
       {/* Main Content */}
