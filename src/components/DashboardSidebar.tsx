@@ -32,7 +32,11 @@ const navItems = [
   { icon: Settings, label: "Settings", path: "/dashboard/settings" },
 ];
 
-export function DashboardSidebar() {
+interface DashboardSidebarProps {
+  onNavigate?: () => void;
+}
+
+export function DashboardSidebar({ onNavigate }: DashboardSidebarProps) {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAuth();
@@ -74,6 +78,7 @@ export function DashboardSidebar() {
               <NavLink
                 key={item.path}
                 to={item.path}
+                onClick={onNavigate}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive 
