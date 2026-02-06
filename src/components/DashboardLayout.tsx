@@ -24,18 +24,17 @@ export function DashboardLayout({ children, title, description }: DashboardLayou
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Mobile Sidebar */}
-      <div className={cn(
-        "fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 md:hidden",
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
-        <DashboardSidebar onNavigate={() => setSidebarOpen(false)} />
-      </div>
+      {sidebarOpen && (
+        <div className="fixed inset-y-0 left-0 z-50 md:hidden">
+          <DashboardSidebar onNavigate={() => setSidebarOpen(false)} />
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="md:ml-64 min-h-screen">
